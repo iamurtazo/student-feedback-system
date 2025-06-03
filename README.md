@@ -2,7 +2,7 @@
 
 A complete Django-based web application for collecting and managing student feedback for educational courses. This system allows students to submit feedback and instructors/administrators to review, filter, and manage the feedback.
 
-![Student Feedback System](static/feedback/img/screenshot.png)
+![Student Feedback System](static/feedback/img/Monosnap Admin Dashboard 2025-06-03 20-26-30.png.png)
 
 ## Features
 
@@ -34,7 +34,7 @@ A complete Django-based web application for collecting and managing student feed
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/student-feedback-system.git
+git clone https://github.com/iamurtazo/student-feedback-system.git
 cd student-feedback-system
 ```
 
@@ -145,4 +145,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-If you have any questions or feedback, please open an issue on GitHub or contact [your-email@example.com].
+If you have any questions or feedback, please open an issue on GitHub or contact [murtazo207@inha.edu.com].
