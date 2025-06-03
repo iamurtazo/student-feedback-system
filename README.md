@@ -2,7 +2,7 @@
 
 A complete Django-based web application for collecting and managing student feedback for educational courses. This system allows students to submit feedback and instructors/administrators to review, filter, and manage the feedback.
 
-![Student Feedback System](static/feedback/img/Monosnap Admin Dashboard 2025-06-03 20-26-30.png.png)
+![Student Feedback System](static/feedback/img/Monosnap Admin Dashboard 2025-06-03 20-26-30.png)
 
 ## Features
 
