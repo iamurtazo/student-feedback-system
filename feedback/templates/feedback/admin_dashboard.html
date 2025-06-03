@@ -1,0 +1,142 @@
+{% extends 'feedback/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Feedback Dashboard</h2>
+    </div>
+    <div class="card-body">
+        <!-- Filters -->
+        <form method="get" action="{% url 'admin_dashboard' %}" class="row g-3 mb-4">
+            <div class="col-md-5">
+                <label for="course" class="form-label">Filter by Course</label>
+                <select class="form-select" id="course" name="course">
+                    <option value="">All Courses</option>
+                    {% for course_obj in courses %}
+                        <option value="{{ course_obj.course }}" {% if current_course == course_obj.course %}selected{% endif %}>
+                            {{ course_obj.course }} ({{ course_obj.count }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label for="status" class="form-label">Filter by Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="addressed" {% if current_status == 'addressed' %}selected{% endif %}>Addressed</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+            </div>
+        </form>
+        
+        <!-- Feedback Table -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if feedbacks %}
+                        {% for feedback in feedbacks %}
+                            <tr>
+                                <td>{{ feedback.id }}</td>
+                                <td>{{ feedback.name }}</td>
+                                <td>{{ feedback.course }}</td>
+                                <td>
+                                    <div class="rating">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= feedback.rating %}
+                                                <span class="text-warning">★</span>
+                                            {% else %}
+                                                <span class="text-muted">★</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="comment-truncate">
+                                        {{ feedback.comment|truncatechars:80 }}
+                                        {% if feedback.comment|length > 80 %}
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#commentModal{{ feedback.id }}">Read more</a>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Comment Modal -->
+                                    <div class="modal fade" id="commentModal{{ feedback.id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Feedback from {{ feedback.name }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="mb-2"><strong>Course:</strong> {{ feedback.course }}</p>
+                                                    <p class="mb-2"><strong>Rating:</strong> {{ feedback.rating }}/5</p>
+                                                    <p class="mb-0"><strong>Comment:</strong></p>
+                                                    <p class="mb-0">{{ feedback.comment }}</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if feedback.status == 'pending' %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Addressed</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ feedback.timestamp|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        {% if feedback.status == 'pending' %}
+                                            <a href="{% url 'mark_addressed' feedback.id %}" class="btn btn-success">
+                                                <i class="bi bi-check2"></i> Mark Addressed
+                                            </a>
+                                        {% endif %}
+                                        <a href="{% url 'delete_feedback' feedback.id %}" class="btn btn-danger" 
+                                           onclick="return confirm('Are you sure you want to delete this feedback?');">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">No feedback records found.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<style>
+    .comment-truncate {
+        max-width: 250px;
+    }
+</style>
+{% endblock %}

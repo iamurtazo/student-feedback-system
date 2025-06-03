@@ -1,0 +1,87 @@
+{% extends 'feedback/base.html' %}
+{% load static %}
+
+{% block title %}Submit Feedback{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Submit Your Feedback</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'home' %}" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Your Name*</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                        <div class="invalid-feedback">
+                            Please provide your name.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="course" class="form-label">Course Name*</label>
+                        <input type="text" class="form-control" id="course" name="course" required>
+                        <div class="invalid-feedback">
+                            Please provide the course name.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating*</label>
+                        <select class="form-select" id="rating" name="rating" required>
+                            <option value="" selected disabled>Select a rating</option>
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Very Good</option>
+                            <option value="3">3 - Good</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="1">1 - Poor</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a rating.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Comments*</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="5" required></textarea>
+                        <div class="invalid-feedback">
+                            Please provide your feedback comments.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Feedback</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // JavaScript for form validation
+    (function() {
+        'use strict';
+        
+        // Fetch all forms we want to apply custom validation styles to
+        var forms = document.querySelectorAll('.needs-validation');
+        
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}
